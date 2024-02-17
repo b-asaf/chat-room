@@ -1,5 +1,4 @@
 import { FormEvent } from "react";
-s
 import { socket } from "../utils/socket";
 
 export function CreateMessage() {
