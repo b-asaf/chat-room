@@ -1,11 +1,16 @@
 import { format } from "date-fns";
 import { Message } from "../App";
+import { socket } from "../utils/socket";
+import { useState } from "react";
 
-type MessageListProp = {
-  messages: Message[];
-};
+export function MessageList() {
+  const [messages, setMessages] = useState<Message[]>([]);
 
-export function MessageList({ messages }: MessageListProp) {
+  socket.on("message", (data: Message) => {
+    const updateMessageList = [...messages, data];
+    setMessages(updateMessageList);
+  });
+
   return (
     <div>
       {messages.map((message) => (
