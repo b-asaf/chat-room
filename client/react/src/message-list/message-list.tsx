@@ -1,18 +1,18 @@
-type Message = {
-    content: string,
-    id: string,
-}
+import { format } from "date-fns";
+import { Message } from "../App";
 
 type MessageListProp = {
-    messages: Message[];
-}
+  messages: Message[];
+};
 
 export function MessageList({ messages }: MessageListProp) {
-    return (
-        <div>
-            {messages.map(message => 
-                <p key={message.id}>{message.content}</p>
-            )}
-        </div>
-    );
+  return (
+    <div>
+      {messages.map((message) => (
+        <li key={message.createAt}>
+          {format(message.createAt, "dd/m/yyyy h:mm:ss")} - {message.content}
+        </li>
+      ))}
+    </div>
+  );
 }

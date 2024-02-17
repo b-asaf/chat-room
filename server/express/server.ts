@@ -1,37 +1,34 @@
-import express from 'express';
-import { Server } from 'socket.io';
+import express from "express";
+import { Server } from "socket.io";
 
+const PORT = process.env.PORT || 3000;
 const app = express();
-const port = 3000;
 
-const io = new Server({
+const expressServer = app.listen(PORT, () => {
+  console.log(`[SERVER] chat-room app listening at ${PORT}`);
+});
+
+const io = new Server(expressServer, {
   cors: {
-    origin: "http://localhost:5173/"
-    // origin: "*"
-    // methods: ["GET", "POST"],
-    // credentials: true
-  }
+    origin: process.env.NODE_ENV
+      ? false
+      : ["http://localhost:5173", "http://127.0.0.1:5173"],
+  },
 });
 
-app.get('/', (req, res) => {
-  res.send('Hello World!');
+io.on("connection", (socket) => {
+  // console.log("a user connected");
+  socket.on("message", (message) => {
+    console.log(`[SERVER]::${message}`);
+    const createAt = Date.now();
+    socket.send({ content: message, createAt });
+  });
+
+  socket.on("disconnect", () => {
+    console.log("user disconnected");
+  });
 });
 
-io.on('connect', (socket) => {
-  console.log('a user connected');
-  
-  // disconnect, remove user from users list
-  socket.on('disconnect', () => {
-    console.log('user disconnected');
-  });
-
-  // broadcast messages to all users
-  socket.on('chat message', (message: string) => {
-    console.log(`message::${message}`);
-    io.emit('chat message', message);
-  });
-})
-
-app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`);
+app.get("/", (req, res) => {
+  res.send("Hello World!");
 });
