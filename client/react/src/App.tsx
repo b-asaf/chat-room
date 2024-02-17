@@ -7,6 +7,7 @@ import { socket } from "./utils/socket";
 export type Message = {
   content: string;
   createAt: number;
+  messageType: "service" | "user";
 };
 
 function App() {

@@ -17,14 +17,40 @@ const io = new Server(expressServer, {
 });
 
 io.on("connection", (socket) => {
-  console.log(`[SERVER] user ${socket.id} is connected`);
-  socket.on("message", (message) => {
-    const createAt = Date.now();
-    io.emit("message", { content: message, createAt });
+  const username = socket.id.substring(0, 5);
+  console.log(`[SERVER] user ${username} is connected`);
+  const connectionDate = Date.now();
+
+  // send a welcome message ONLY to the new user
+  socket.emit("message", {
+    content: "Welcome to the chat-room!",
+    createAt: connectionDate,
+    messageType: "service",
   });
 
+  // send a notification to all OTHER users that are connected
+  socket.broadcast.emit("message", {
+    content: `user ${username} is now connected`,
+    createAt: connectionDate,
+    messageType: "service",
+  });
+
+  // listening for a message
+  socket.on("message", (message) => {
+    io.emit("message", {
+      content: message,
+      createAt: Date.now(),
+      messageType: "user",
+    });
+  });
+
+  // listening to user disconnection
   socket.on("disconnect", () => {
-    console.log("user disconnected");
+    socket.broadcast.emit("message", {
+      content: `user ${username} disconnected`,
+      createAt: Date.now(),
+      messageType: "service",
+    });
   });
 });
 
