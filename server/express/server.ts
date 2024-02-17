@@ -17,11 +17,10 @@ const io = new Server(expressServer, {
 });
 
 io.on("connection", (socket) => {
-  // console.log("a user connected");
+  console.log(`[SERVER] user ${socket.id} is connected`);
   socket.on("message", (message) => {
-    console.log(`[SERVER]::${message}`);
     const createAt = Date.now();
-    socket.send({ content: message, createAt });
+    io.emit("message", { content: message, createAt });
   });
 
   socket.on("disconnect", () => {
