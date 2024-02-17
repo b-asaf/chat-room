@@ -1,7 +1,9 @@
 import { useState } from "react";
 
-import { MessageList } from "./message-list/message-list";
 import { CreateMessage } from "./create-message/create-message";
+import { JoinForm } from "./join-form/join-form";
+import { MessageList } from "./message-list/message-list";
+
 import { socket } from "./utils/socket";
 
 export type Message = {
@@ -19,9 +21,14 @@ function App() {
   });
 
   return (
-    <div>
-      <CreateMessage />
+    <div className="flex flex-col p-4 h-screen bg-slate-400">
+      <JoinForm />
       <MessageList messages={messages} />
+      {/* TBD */}
+      {/* <UserList /> */}
+      {/* <RoomList /> */}
+      {/* <Activity /> */}
+      <CreateMessage />
     </div>
   );
 }

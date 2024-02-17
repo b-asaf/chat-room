@@ -8,6 +8,14 @@ const expressServer = app.listen(PORT, () => {
   console.log(`[SERVER] chat-room app listening at ${PORT}`);
 });
 
+// users storage - in memory
+type User = {
+  name: string;
+  room: string;
+  id: string;
+};
+const users: Record<string, User> = {};
+
 const io = new Server(expressServer, {
   cors: {
     origin: process.env.NODE_ENV
@@ -17,22 +25,31 @@ const io = new Server(expressServer, {
 });
 
 io.on("connection", (socket) => {
-  const username = socket.id.substring(0, 5);
-  console.log(`[SERVER] user ${username} is connected`);
+  const id = socket.id.substring(0, 5);
   const connectionDate = Date.now();
 
-  // send a welcome message ONLY to the new user
-  socket.emit("message", {
-    content: "Welcome to the chat-room!",
-    createAt: connectionDate,
-    messageType: "service",
-  });
+  socket.on("join room", (data) => {
+    const user = {
+      name: data.username,
+      room: data.room,
+      id: id,
+    };
 
-  // send a notification to all OTHER users that are connected
-  socket.broadcast.emit("message", {
-    content: `user ${username} is now connected`,
-    createAt: connectionDate,
-    messageType: "service",
+    users[id] = user;
+
+    // send a welcome message ONLY to the new user
+    socket.emit("message", {
+      content: `${user.name.toUpperCase()} welcome to ${user.room}!`,
+      createAt: connectionDate,
+      messageType: "service",
+    });
+
+    // send a notification to all OTHER users that are connected
+    socket.broadcast.emit("message", {
+      content: `user ${user.name.toUpperCase()} entered the room`,
+      createAt: connectionDate,
+      messageType: "service",
+    });
   });
 
   // listening for a message
@@ -46,14 +63,15 @@ io.on("connection", (socket) => {
 
   // listening to user disconnection
   socket.on("disconnect", () => {
-    socket.broadcast.emit("message", {
-      content: `user ${username} disconnected`,
-      createAt: Date.now(),
-      messageType: "service",
-    });
-  });
-});
+    const user = users[id];
+    delete users[id];
 
-app.get("/", (req, res) => {
-  res.send("Hello World!");
+    if (user) {
+      socket.broadcast.emit("message", {
+        content: `${user.name.toUpperCase()} left the ${user.room} room`,
+        createAt: Date.now(),
+        messageType: "service",
+      });
+    }
+  });
 });

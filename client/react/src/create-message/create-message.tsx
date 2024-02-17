@@ -7,7 +7,7 @@ export function CreateMessage() {
     const inputVal = event.currentTarget.message.value;
 
     if (inputVal) {
-      socket.send(inputVal);
+      socket.emit("message", inputVal);
       event.currentTarget.reset();
     }
   };
@@ -21,7 +21,12 @@ export function CreateMessage() {
         className="focus:outline-none"
         placeholder="Enter message"
       />
-      <button type="submit">Submit</button>
+      <button
+        type="submit"
+        className="rounded-md p-2 bg-blue-500 hover:bg-blue-600 transition-colors"
+      >
+        Submit
+      </button>
     </form>
   );
 }

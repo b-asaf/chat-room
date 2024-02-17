@@ -10,7 +10,7 @@ export function MessageList({ messages }: MessageListProp) {
     <div>
       {messages.map((message) => (
         <li key={message.createAt}>
-          {format(message.createAt, "dd/m/yyyy h:mm:ss")} - {message.content}
+          {format(message.createAt, "H:mm:ss")} - {message.content}
         </li>
       ))}
     </div>
