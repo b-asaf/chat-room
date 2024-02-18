@@ -74,15 +74,13 @@ io.on("connection", (socket) => {
 
   // listening to user disconnection
   socket.on("disconnect", () => {
-    const user = users[id];
-    delete users[id];
+    const user = userLeavesApp(socket.id);
 
     if (user) {
-      socket.broadcast.emit("message", {
-        content: `${user.name.toUpperCase()} left chat-room!`,
-        createAt: Date.now(),
-        messageType: "service",
-      });
+      socket.broadcast.emit(
+        "message",
+        buildMessage(ADMIN, `${user.name.toUpperCase()} left chat-room!`)
+      );
     }
   });
 });
@@ -107,12 +105,15 @@ function activateUser(socketId: string, name: string) {
   return user;
 }
 
-function userLeavesApp(userId: string) {
-  const user = users[userId];
+function userLeavesApp(socketId: string) {
+  const id = socketId.substring(0, 5);
+  const user = users[id];
 
   if (user) {
-    delete users[userId];
+    delete users[id];
   }
+
+  return user;
 }
 
 function findUser(socketId: string) {
