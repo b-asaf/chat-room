@@ -44,6 +44,8 @@ io.on("connection", (socket) => {
     const user = activateUser(socket.id, data.username);
 
     if (user) {
+      // update users list for everyone
+      io.emit("user list", { users: users });
       // send a welcome message ONLY to the new user
       socket.emit(
         "message",
@@ -63,6 +65,7 @@ io.on("connection", (socket) => {
     const user = findUser(socket.id);
     // send message only if there is a user
     if (user) {
+      // send to everyone - the current user and all the rest
       io.emit("message", buildMessage(user.name, message));
     } else {
       socket.emit(
@@ -81,6 +84,9 @@ io.on("connection", (socket) => {
         "message",
         buildMessage(ADMIN, `${user.name.toUpperCase()} left chat-room!`)
       );
+
+      // update users list for everyone
+      io.emit("user list", { users: users });
     }
   });
 });
