@@ -3,6 +3,7 @@
     "version": "0.0.0",
     "scripts": {
         "start:express": "npm run start --prefix server/express",
-        "start:react": "npm run dev --prefix client/react"
+        "start:react": "npm run dev --prefix client/react",
+        "start:vue": "npm run dev --prefix client/vue"
     }
 }
