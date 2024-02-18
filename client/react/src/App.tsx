@@ -15,9 +15,6 @@ function App() {
       <JoinForm />
       <MessageList />
       <UserList />
-      {/* TBD */}
-      {/* <RoomList /> */}
-      {/* <Activity /> */}
       <CreateMessage />
     </div>
   );
