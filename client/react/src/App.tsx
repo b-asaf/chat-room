@@ -1,8 +1,8 @@
 import { CreateMessage } from "./create-message/create-message";
 import { JoinForm } from "./join-form/join-form";
-import { MessageList } from "./message-list/message-list";
+import { MessageList } from "./messages/message-list";
 
-export type Message = {
+export type MessageType = {
   username: string;
   content: string;
   createAt: number;
@@ -10,7 +10,7 @@ export type Message = {
 
 function App() {
   return (
-    <div className="flex flex-col p-4 h-screen bg-slate-400">
+    <div className="flex flex-col p-4 h-screen">
       <JoinForm />
       <MessageList />
       {/* TBD */}

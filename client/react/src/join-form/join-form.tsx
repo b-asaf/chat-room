@@ -1,18 +1,24 @@
 import { FormEvent } from "react";
 import { socket } from "../utils/socket";
+import { useUserName } from "../hooks/use-user-name";
 
 export function JoinForm() {
+  const { onEnterRoom } = useUserName();
+
   const enterRoom = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     const username = event.currentTarget.username.value;
 
     socket.emit("join room", { username });
-    event.currentTarget.reset();
+    onEnterRoom(username);
   };
 
   return (
-    <form onSubmit={enterRoom} className="flex w-full justify-center gap-x-2">
+    <form
+      onSubmit={enterRoom}
+      className="flex w-full justify-center m-auto gap-1"
+    >
       <input
         type="text"
         id="username"
