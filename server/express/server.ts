@@ -11,9 +11,10 @@ const expressServer = app.listen(PORT, () => {
 // users storage - in memory
 type User = {
   name: string;
-  room: string;
   id: string;
 };
+
+const ADMIN = "Admin";
 const users: Record<string, User> = {};
 
 const io = new Server(expressServer, {
@@ -26,39 +27,49 @@ const io = new Server(expressServer, {
 
 io.on("connection", (socket) => {
   const id = socket.id.substring(0, 5);
-  const connectionDate = Date.now();
+
+  // Send message only to current user
+  socket.emit("message", buildMessage(ADMIN, "Welcome to chat-room!"));
+
+  // send a notification to all OTHER users that are connected
+  const user = findUser(socket.id);
+  if (user) {
+    socket.broadcast.emit(
+      "message",
+      buildMessage(ADMIN, `${user.name.toUpperCase()} entered chat-room`)
+    );
+  }
 
   socket.on("join room", (data) => {
-    const user = {
-      name: data.username,
-      room: data.room,
-      id: id,
-    };
+    const user = activateUser(socket.id, data.username);
 
-    users[id] = user;
+    if (user) {
+      // send a welcome message ONLY to the new user
+      socket.emit(
+        "message",
+        buildMessage(ADMIN, `${user.name.toUpperCase()} welcome to chat-room!`)
+      );
 
-    // send a welcome message ONLY to the new user
-    socket.emit("message", {
-      content: `${user.name.toUpperCase()} welcome to ${user.room}!`,
-      createAt: connectionDate,
-      messageType: "service",
-    });
-
-    // send a notification to all OTHER users that are connected
-    socket.broadcast.emit("message", {
-      content: `user ${user.name.toUpperCase()} entered the room`,
-      createAt: connectionDate,
-      messageType: "service",
-    });
+      // send a notification to all OTHER users that are connected
+      socket.broadcast.emit(
+        "message",
+        buildMessage(ADMIN, `${user.name.toUpperCase()} entered chat-room`)
+      );
+    }
   });
 
   // listening for a message
   socket.on("message", (message) => {
-    io.emit("message", {
-      content: message,
-      createAt: Date.now(),
-      messageType: "user",
-    });
+    const user = findUser(socket.id);
+    // send message only if there is a user
+    if (user) {
+      io.emit("message", buildMessage(user.name, message));
+    } else {
+      socket.emit(
+        "message",
+        buildMessage(ADMIN, "user must join chat-room to start chatting")
+      );
+    }
   });
 
   // listening to user disconnection
@@ -68,10 +79,44 @@ io.on("connection", (socket) => {
 
     if (user) {
       socket.broadcast.emit("message", {
-        content: `${user.name.toUpperCase()} left the ${user.room} room`,
+        content: `${user.name.toUpperCase()} left chat-room!`,
         createAt: Date.now(),
         messageType: "service",
       });
     }
   });
 });
+
+function buildMessage(name: string, content: string) {
+  return {
+    username: name,
+    content,
+    createAt: Date.now(),
+  };
+}
+
+// users
+function activateUser(socketId: string, name: string) {
+  const id = socketId.substring(0, 5);
+  const user = { id, name };
+
+  if (!users[id]) {
+    users[id] = user;
+  }
+
+  return user;
+}
+
+function userLeavesApp(userId: string) {
+  const user = users[userId];
+
+  if (user) {
+    delete users[userId];
+  }
+}
+
+function findUser(socketId: string) {
+  const userId = socketId.substring(0, 5);
+
+  return users[userId];
+}

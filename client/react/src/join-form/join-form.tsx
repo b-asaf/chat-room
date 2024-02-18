@@ -6,9 +6,8 @@ export function JoinForm() {
     event.preventDefault();
 
     const username = event.currentTarget.username.value;
-    const room = event.currentTarget.room.value;
 
-    socket.emit("join room", { username, room });
+    socket.emit("join room", { username });
     event.currentTarget.reset();
   };
 
@@ -20,15 +19,6 @@ export function JoinForm() {
         name="username"
         maxLength={8}
         placeholder="Your name"
-        required
-        className="max-w-[60%] gap-2 rounded-md w-1/4 px-1 focus:outline-none"
-      />
-      <input
-        type="text"
-        id="room"
-        name="room"
-        maxLength={8}
-        placeholder="Chat room"
         required
         className="max-w-[60%] gap-2 rounded-md w-1/4 px-1 focus:outline-none"
       />

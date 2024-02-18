@@ -15,6 +15,7 @@ export function MessageList() {
     <div>
       {messages.map((message) => (
         <li key={message.createAt}>
+          <p>{message.username}</p>
           {format(message.createAt, "H:mm:ss")} - {message.content}
         </li>
       ))}

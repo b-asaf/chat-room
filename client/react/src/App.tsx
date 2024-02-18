@@ -3,9 +3,9 @@ import { JoinForm } from "./join-form/join-form";
 import { MessageList } from "./message-list/message-list";
 
 export type Message = {
+  username: string;
   content: string;
   createAt: number;
-  messageType: "service" | "user";
 };
 
 function App() {
