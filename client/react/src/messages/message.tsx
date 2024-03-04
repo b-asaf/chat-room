@@ -11,7 +11,6 @@ type MessageProps = {
 
 export function Message({ message }: MessageProps) {
   const { userName } = useUserName();
-  console.log(userName);
 
   let postLocation = "";
   let headerBgStyle = "";
