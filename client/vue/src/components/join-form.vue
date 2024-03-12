@@ -16,7 +16,7 @@ let socketState = ref("");
 <template>
   <form
     @submit.prevent="enterRoom"
-    class="flex w-full justify-center m-auto gap-1"
+    class="flex w-full justify-center m-auto gap-1 mb-4"
   >
     <p>{{ socketState.connected }}</p>
     <input

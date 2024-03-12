@@ -1,5 +1,6 @@
 <script setup>
 import { format } from "date-fns";
+import { userStore } from "../stores/user-store.ts";
 
 defineProps({
   username: String,
@@ -8,8 +9,7 @@ defineProps({
 });
 
 const ADMIN = "Admin";
-// will be replaced by user from socket
-const currentUsername = "Asaf";
+const currentUsername = userStore.userName;
 </script>
 
 <template>
