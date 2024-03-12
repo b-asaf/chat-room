@@ -9,7 +9,6 @@ Server:
 Client:
 1. React
 2. Vue
-3. - consider
 
 Consider:
 1. NextJS
