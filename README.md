@@ -1,5 +1,6 @@
 A simple chat-room app that is built in a few technologies and utilizes socket.io.
-There is no persistence.
+
+_There is no persistence._
 
 Server:
 1. nodeJS with Express framework
