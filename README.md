@@ -1,5 +1,6 @@
-A simple chat-room app that is build in few technologies and utilize socket.io.
-There is no persistance.
+A simple chat-room app that is built in a few technologies and utilizes socket.io.
+
+_There is no persistence._
 
 Server:
 1. nodeJS with Express framework
@@ -8,13 +9,17 @@ Server:
 
 Client:
 1. React
-2. Vue - Work in Progress
-
+2. Vue
 
 Consider:
 1. NextJS
+2. [Astro](https://astro.build/)
+3. [HTMX](https://htmx.org/)
+4. [Solidjs](https://www.solidjs.com/)
 
 To run the application, in the root folder `chat-room` type:
-1. **SERVER** with Express: `s`
-2. **Client** with React: `npm run start:react`
-3. **Client** with Vue: `npm run start:vue`
+- **SERVER**
+  - _Express_ `npm run start:express`
+- **Client**
+  - _React_ `npm run start:react`
+  - _Vue_ `npm run start:vue`
