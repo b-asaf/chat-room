@@ -17,7 +17,7 @@ export function JoinForm() {
   return (
     <form
       onSubmit={enterRoom}
-      className="flex w-full justify-center m-auto gap-1"
+      className="flex w-full justify-center m-auto gap-1 mb-4"
     >
       <input
         type="text"

@@ -20,7 +20,7 @@ export function UserList() {
   const visibleUsers = users.map((user) => user.name).join(", ");
 
   return (
-    <div className="flex flex-col w-full min-h-10 px-3 py-1 bg-slate-400 rounded-md">
+    <div className="flex flex-col w-full min-h-12 justify-center px-3 py-1 mt-4 bg-slate-400 rounded-md">
       <h3>Users List</h3>
       {users.length === 0 ? (
         <p>The chat-room is empty!</p>

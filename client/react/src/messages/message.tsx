@@ -1,6 +1,6 @@
 import { format } from "date-fns";
 
-import { MessageType } from "../App";
+import type { MessageType } from "./types";
 import { useUserName } from "../hooks/use-user-name";
 
 const ADMIN = "Admin";

@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 import { Message } from "./message";
-import { MessageType } from "../App";
+import type { MessageType } from "./types";
 import { socket } from "../utils/socket";
 
 export function MessageList() {
@@ -13,10 +13,12 @@ export function MessageList() {
   });
 
   return (
-    <div className="flex flex-col bg-slate-200 w-full rounded-xl flex-grow overflow-auto justify-start mx-auto my-4">
-      {messages.map((message) => (
-        <Message key={message.createAt} message={message} />
-      ))}
+    <div className="flex flex-col h-screen overflow-auto">
+      <div className="flex-grow bg-slate-200 w-full rounded-xl justify-start mx-auto">
+        {messages.map((message) => (
+          <Message key={message.createAt} message={message} />
+        ))}
+      </div>
     </div>
   );
 }
