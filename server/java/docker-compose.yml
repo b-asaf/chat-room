@@ -1,0 +1,10 @@
+version: "3.8"
+
+services:
+  chat-room-be:
+    build: . # Build from current directory (server/java)
+    volumes:
+      - ./server/java:/app # Mount the server/java directory as a volume
+    ports:
+      - "3000:3000" # Map container port to host port
+    restart: unless-stopped # Restart the container automatically on failures

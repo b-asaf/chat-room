@@ -1,9 +1,10 @@
 {
-    "name": "chat-room",
-    "version": "0.0.0",
-    "scripts": {
-        "start:express": "npm run start --prefix server/express",
-        "start:react": "npm run dev --prefix client/react",
-        "start:vue": "npm run dev --prefix client/vue"
-    }
+  "name": "chat-room",
+  "version": "0.0.0",
+  "scripts": {
+    "start:express": "npm run start --prefix server/express",
+    "start:java": "npm run dev --prefix server/java",
+    "start:react": "npm run dev --prefix client/react",
+    "start:vue": "npm run dev --prefix client/vue"
+  }
 }
